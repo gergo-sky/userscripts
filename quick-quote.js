@@ -1,7 +1,7 @@
 // @ts-check
 
 // ==UserScript==
-// @name         Quick Quote Journey
+// @name         Quick Quote Journey GitHub
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Automate journey steps
