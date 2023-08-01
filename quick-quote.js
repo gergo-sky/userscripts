@@ -9,6 +9,7 @@
 // @match        https://local.bskyb.com:8443/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bskyb.com
 // @grant        none
+// @downloadURL  https://raw.githubusercontent.com/gergo-sky/userscripts/main/quick-quote.js
 // ==/UserScript==
 
 (async function () {
