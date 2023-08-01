@@ -218,11 +218,11 @@
 
   await clickBtn(QUICK_NAV_SELECTOR);
 
-  // // Page 7 - Claims
+  // Page 7 - Claims
 
-  // await clickBtn('[data-test-id="radio-button-has-claims-no"]');
+  await clickBtn('[data-test-id="radio-button-has-claims-no"]');
 
-  // await clickBtn(NEXT_BTN_SELECTOR);
+  await clickBtn(NEXT_BTN_SELECTOR);
 
   // // Page 8 - How do you pay for insurance?
 
