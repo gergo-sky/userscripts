@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# ~/watchtest.sh ./src "yarn test pagecontainer"
+
 # Get directory to watch from the command line argument
 WATCH_DIR="$1"
 
