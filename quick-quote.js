@@ -203,15 +203,18 @@
   };
 
   /**
-   * @returns {Promise<void>}
+   * Scrolls element into view.
+   *
+   * @param {string} selector
    */
-  const scrollToElem = async (selector, timeToWait = WAIT) => {
-    /** @type {HTMLElement | null} */
-    const elem = document.querySelector(selector);
-
-    if (elem) elem.scrollIntoView();
-
-    await delay(timeToWait);
+  const scrollToElem = (selector) => {
+    waitForElements(
+      selector,
+      SELECTOR_TIMEOUT,
+      (/** @type {HTMLElement} */ elems) => {
+        elems[0].scrollIntoView();
+      }
+    );
   };
 
   /**
@@ -254,7 +257,7 @@
 
   // Page 5 - Move in Date
 
-  await changeSelectIndex("#year-select", 8, 1500);
+  await changeSelectIndex("#year-select", 8, 2000);
 
   clickBtn(QUICK_NAV_SELECTOR);
 
@@ -310,21 +313,19 @@
 
   clickBtn('[data-test-id="radio-button-assumption-1-true"]');
 
-  await delay(1500);
+  await delay(2000);
 
   clickBtn(NEXT_BTN_SELECTOR);
 
   // Page 14 - Customize
 
-  // TODO
+  scrollToElem('[data-test-id="summary-cta-button-footer"]');
 
-  // await scrollToElem('[data-test-id="upgrade-insurance"]', 1000);
+  clickBtn('[data-test-id="summary-cta-button-footer"]');
 
-  // await clickBtn('[data-test-id="summary-cta-button-update"]');
+  // Policy holder
 
-  // // Policy holder
+  clickBtn('[data-test-id="radio-button-no"]');
 
-  // await clickBtn('[data-test-id="radio-button-no"]');
-
-  // await clickBtn(NEXT_BTN_SELECTOR);
+  clickBtn(NEXT_BTN_SELECTOR);
 })();
