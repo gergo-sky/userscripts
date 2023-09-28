@@ -17,24 +17,6 @@
 
   /**
    *
-   * Constants
-   *
-   */
-
-  /** @type {number} */
-  const WAIT = 200;
-
-  /** @type {number} */
-  const SELECTOR_TIMEOUT = 10000;
-
-  /** @type {string} */
-  const QUICK_NAV_SELECTOR = '[data-test-id="quick-navigation"]';
-
-  /** @type {string} */
-  const NEXT_BTN_SELECTOR = '[data-test-id="next-button"]';
-
-  /**
-   *
    * Test data
    *
    */
@@ -53,6 +35,24 @@
 
   /** @type {string} */
   const TEST_LAST_NAME = "ABBAS-soipleave";
+
+  /**
+   *
+   * Constants
+   *
+   */
+
+  /** @type {number} */
+  const WAIT = 200;
+
+  /** @type {number} */
+  const SELECTOR_TIMEOUT = 10000;
+
+  /** @type {string} */
+  const QUICK_NAV_SELECTOR = '[data-test-id="quick-navigation"]';
+
+  /** @type {string} */
+  const NEXT_BTN_SELECTOR = '[data-test-id="next-button"]';
 
   /**
    *
