@@ -1,10 +1,8 @@
-// @ts-check
-
 // ==UserScript==
-// @name         Quick Quote Journey GitHub
+// @name         Quick Quote Journey Automation
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  Automate journey steps
+// @description  Automate going through the journey steps
 // @author       You
 // @match        https://local.bskyb.com:8443/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bskyb.com
@@ -42,17 +40,20 @@
    *
    */
 
-  /** @type {number} */
-  const WAIT = 200;
-
-  /** @type {number} */
-  const SELECTOR_TIMEOUT = 10000;
-
   /** @type {string} */
   const QUICK_NAV_SELECTOR = '[data-test-id="quick-navigation"]';
 
   /** @type {string} */
   const NEXT_BTN_SELECTOR = '[data-test-id="next-button"]';
+
+  /** @type {number} */
+  const STANDARD_WAIT = 200;
+
+  /** @type {number} */
+  const SELECTOR_TIMEOUT = 10000;
+
+  /** @type {number} */
+  const SELECTOR_WAIT_POLL = 100;
 
   /**
    *
@@ -77,10 +78,10 @@
       if (elements.length > 0) {
         callback(elements);
       } else if (Date.now() - startTime < timeout) {
-        setTimeout(checkElements, 100);
+        setTimeout(checkElements, SELECTOR_WAIT_POLL);
       } else {
         console.error(
-          `Timeout exceeded while waiting for elements "${selector}"`
+          `Timeout exceeded while waiting for elements with selector "${selector}"`
         );
       }
     };
@@ -105,10 +106,10 @@
       if (btn && !btn.disabled) {
         callback(btn);
       } else if (Date.now() - startTime < timeout) {
-        setTimeout(checkForBtn, 100);
+        setTimeout(checkForBtn, SELECTOR_WAIT_POLL);
       } else {
         console.error(
-          `Timeout exceeded while waiting for button "${selector}"`
+          `Timeout exceeded while waiting for button that is not disabled with selector "${selector}"`
         );
       }
     };
@@ -156,15 +157,27 @@
   };
 
   /**
+   * Changes a select element's option.
+   *
    * @param {string} selector
    * @param {number} optionIdx
+   * @returns {Promise<void>}
    */
-  const changeSelectIndex = async (selector, optionIdx, timeToWait = WAIT) => {
-    waitForElements(selector, SELECTOR_TIMEOUT, (elems) => {
-      elems[0].selectedIndex = optionIdx;
-    });
+  const changeSelectIndex = async (
+    selector,
+    optionIdx,
+    timeToWait = STANDARD_WAIT
+  ) => {
+    waitForElements(
+      selector,
+      SELECTOR_TIMEOUT,
+      (/** @type {NodeListOf<HTMLSelectElement>} */ elems) => {
+        elems[0].selectedIndex = optionIdx;
+      }
+    );
 
-    // TODO Remove delay if possible
+    // A delay is needed to correctly populate state.
+    // TODO check if this can be avoided.
     await delay(timeToWait);
   };
 
@@ -195,9 +208,9 @@
       selector,
       SELECTOR_TIMEOUT,
       (/** @type {HTMLElement} */ elems) => {
-        const firstElem = elems?.[index];
+        const nthElem = elems?.[index];
 
-        firstElem?.click();
+        nthElem?.click();
       }
     );
   };
@@ -313,6 +326,7 @@
 
   clickBtn('[data-test-id="radio-button-assumption-1-true"]');
 
+  // Again a delay is needed to wait for state to populate?
   await delay(2000);
 
   clickBtn(NEXT_BTN_SELECTOR);
