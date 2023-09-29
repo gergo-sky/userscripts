@@ -127,17 +127,18 @@
    * @return {void}
    */
   const setNativeValue = (element, value) => {
-    const valueSetter = Object.getOwnPropertyDescriptor(element, "value")?.set;
+    const { set: valueSetter } =
+      Object.getOwnPropertyDescriptor(element, "value") || {};
     const prototype = Object.getPrototypeOf(element);
-    const prototypeValueSetter = Object.getOwnPropertyDescriptor(
-      prototype,
-      "value"
-    )?.set;
+    const { set: prototypeValueSetter } =
+      Object.getOwnPropertyDescriptor(prototype, "value") || {};
 
-    if (valueSetter && valueSetter !== prototypeValueSetter) {
-      prototypeValueSetter?.call(element, value);
+    if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+      prototypeValueSetter.call(element, value);
+    } else if (valueSetter) {
+      valueSetter.call(element, value);
     } else {
-      valueSetter?.call(element, value);
+      throw new Error("The given element does not have a value setter");
     }
   };
 
@@ -240,7 +241,7 @@
 
   // Page 1 - Initial Load
 
-  await delay(500);
+  await delay(2000);
 
   fillInputNatively("#address-postcode-input", TEST_POSTCODE);
 
