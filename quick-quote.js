@@ -240,6 +240,8 @@
 
   // Page 1 - Initial Load
 
+  await delay(500);
+
   fillInputNatively("#address-postcode-input", TEST_POSTCODE);
 
   clickBtn('[data-test-id="postcode-get-started-btn"]');
