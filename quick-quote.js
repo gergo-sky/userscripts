@@ -10,6 +10,8 @@
 // @require      file:///Users/gdz03/userscripts/quick-quote.js
 // ==/UserScript==
 
+// TODO Check if this can be done via playwright by attaching to running chrome instance
+
 (async function () {
   ("use strict");
 
