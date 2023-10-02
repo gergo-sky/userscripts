@@ -4,9 +4,7 @@
 // @version      0.1
 // @description  Automate going through the journey steps
 // @author       You
-// @match        https://local.bskyb.com:8443/protect/*
-// @match        https://www.sky.com/protect/*
-// @match        https://pam-sky-protect-*-*.cf.dev-paas.bskyb.com/protect/*
+// @match        *://*/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bskyb.com
 // @grant        none
 // @require      file:///Users/gdz03/userscripts/quick-quote.js
@@ -22,7 +20,7 @@
    */
 
   /** @type {string} */
-  const TEST_EMAIL = "autoft.1675262929861@sky.uk";
+  const TEST_EMAIL = "SOg_621195980134_PR@sky.uk";
 
   /** @type {string} */
   const TEST_DOB = "19/09/1972";
@@ -319,32 +317,32 @@
 
   clickBtn('[data-test-id="dob-input"]');
 
-  // clickBtn('[data-test-id="show-quote"]');
+  clickBtn('[data-test-id="show-quote"]');
 
-  // // Page 12 - Price Presentation
+  // Page 12 - Price Presentation
 
-  // clickBtn('[data-test-id="choose-and-customise"]');
+  clickBtn('[data-test-id="choose-and-customise"]');
 
-  // // Page 13 - Aggreement
+  // Page 13 - Aggreement
 
-  // clickBtn('[data-test-id="radio-button-assumption-0-true"]');
+  clickBtn('[data-test-id="radio-button-assumption-0-true"]');
 
-  // clickBtn('[data-test-id="radio-button-assumption-1-true"]');
+  clickBtn('[data-test-id="radio-button-assumption-1-true"]');
 
-  // // Again a delay is needed to wait for state to populate?
-  // await delay(2000);
+  // Again a delay is needed to wait for state to populate?
+  await delay(2000);
 
-  // clickBtn(NEXT_BTN_SELECTOR);
+  clickBtn(NEXT_BTN_SELECTOR);
 
-  // // Page 14 - Customize
+  // Page 14 - Customize
 
-  // scrollToElem('[data-test-id="summary-cta-button-footer"]');
+  scrollToElem('[data-test-id="summary-cta-button-footer"]');
 
-  // clickBtn('[data-test-id="summary-cta-button-footer"]');
+  clickBtn('[data-test-id="summary-cta-button-footer"]');
 
-  // // Policy holder
+  // Policy holder
 
-  // clickBtn('[data-test-id="radio-button-no"]');
+  clickBtn('[data-test-id="radio-button-no"]');
 
-  // clickBtn(NEXT_BTN_SELECTOR);
+  clickBtn(NEXT_BTN_SELECTOR);
 })();
