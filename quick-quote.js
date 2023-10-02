@@ -23,6 +23,9 @@
   const TEST_EMAIL = "SOg_621195980134_PR@sky.uk";
 
   /** @type {string} */
+  const TEST_PASSWORD = "test1234";
+
+  /** @type {string} */
   const TEST_DOB = "19/09/1972";
 
   /** @type {string} */
@@ -33,6 +36,9 @@
 
   /** @type {string} */
   const TEST_LAST_NAME = "ABBAS-soipleave";
+
+  /** @type {string} */
+  const TEST_MOBILE_NUM = "07123456789";
 
   /**
    *
@@ -50,7 +56,7 @@
   const STANDARD_WAIT = 200;
 
   /** @type {number} */
-  const SELECTOR_TIMEOUT = 10000;
+  const SELECTOR_TIMEOUT = 20000;
 
   /** @type {number} */
   const SELECTOR_WAIT_POLL = 100;
@@ -345,4 +351,18 @@
   clickBtn('[data-test-id="radio-button-no"]');
 
   clickBtn(NEXT_BTN_SELECTOR);
+
+  // Sign in
+
+  fillInputNatively('[data-testid="PASSWORD__INPUT"]', TEST_PASSWORD);
+
+  clickBtn('[data-testid="AUTHN__SUBMIT_BTN"]');
+
+  // Mobile Number
+
+  fillInputNatively('[data-test-id="mobile-number-input"]', TEST_MOBILE_NUM);
+
+  await delay(12500);
+
+  clickBtn('[data-test-id="continue-button"]');
 })();
