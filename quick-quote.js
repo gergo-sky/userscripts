@@ -284,6 +284,15 @@
     } else {
       window.dispatchEvent(new Event(SELECT_ADDRESS_STEP, { bubbles: true }));
     }
+
+    window.dispatchEvent(
+      new Event(
+        window.location.href.split("/")[
+          window.location.href.split("/").length - 1
+        ],
+        { bubbles: true }
+      )
+    );
   });
 
   window.addEventListener(SELECT_ADDRESS_STEP, async () => {
@@ -424,29 +433,15 @@
   window.addEventListener(POLICY_HOLDER_STEP, async () => {
     await clickBtn('[data-test-id="radio-button-no"]');
 
-    await clickBtn(
-      NEXT_BTN_SELECTOR,
-      new Event(SIGN_IN_STEP, { bubbles: true })
-    );
+    await clickBtn(NEXT_BTN_SELECTOR);
   });
 
-  window.addEventListener(SIGN_IN_STEP, async () => {
-    await fillInputNatively('[data-testid="PASSWORD__INPUT"]', TEST_PASSWORD);
-
-    await clickBtn(
-      '[data-testid="AUTHN__SUBMIT_BTN"]',
-      new Event(MOBILE_NUMBER_STEP, { bubbles: true })
+  window.addEventListener(MOBILE_NUMBER_STEP, async () => {
+    await fillInputNatively(
+      '[data-test-id="mobile-number-input"]',
+      TEST_MOBILE_NUM
     );
+
+    await clickBtn('[data-test-id="continue-button"]');
   });
-
-  // window.addEventListener(SIGN_IN_STEP, async () => {
-  //   await delay(12500);
-
-  //   await fillInputNatively(
-  //     '[data-test-id="mobile-number-input"]',
-  //     TEST_MOBILE_NUM
-  //   );
-
-  //   await clickBtn('[data-test-id="continue-button"]');
-  // });
 })();
