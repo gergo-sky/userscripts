@@ -294,7 +294,7 @@
 
   // Page 5 - Move in Date
 
-  await changeSelectIndex("#year-select", 8, 2000);
+  await changeSelectIndex("#year-select", 8);
 
   await clickBtn(QUICK_NAV_SELECTOR);
 
@@ -373,14 +373,14 @@
 
   await clickBtn('[data-testid="AUTHN__SUBMIT_BTN"]');
 
-  // Mobile Number
+  // // Mobile Number
 
-  await fillInputNatively(
-    '[data-test-id="mobile-number-input"]',
-    TEST_MOBILE_NUM
-  );
+  // await fillInputNatively(
+  //   '[data-test-id="mobile-number-input"]',
+  //   TEST_MOBILE_NUM
+  // );
 
-  await delay(12500);
+  // await delay(12500);
 
-  await clickBtn('[data-test-id="continue-button"]');
+  // await clickBtn('[data-test-id="continue-button"]');
 })();
