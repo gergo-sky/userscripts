@@ -10,8 +10,6 @@
 // @require      file:///Users/gdz03/userscripts/quick-quote.js
 // ==/UserScript==
 
-// TODO Check if this can be done via playwright by attaching to running chrome instance
-
 (async function () {
   ("use strict");
 
@@ -64,7 +62,30 @@
   const SELECTOR_WAIT_POLL = 100;
 
   /** @type {number} */
-  const WAIT = 200;
+  const WAIT = 50;
+
+  /**
+   *
+   * Steps
+   *
+   */
+
+  const SELECT_ADDRESS_STEP = "select-address";
+  const NAME_STEP = "name-step";
+  const RENT_OWN_STEP = "rent-own";
+  const MOVE_IN_STEP = "move-in";
+  const HOUSEHOLD_STEP = "household";
+  const CLAIMS_STEP = "claims";
+  const PAYMENT_SCHEDULE_STEP = "payment-schedule";
+  const BEDROOMS_STEP = "bedrooms";
+  const COVER_DATE_STEP = "cover-date";
+  const ONE_LAST_THING_STEP = "one-last-thing";
+  const PRICE_PRESENTATION_STEP = "price-presentation";
+  const AGREEMENT_STEP = "agreement";
+  const CUSTOMISE_STEP = "customise";
+  const POLICY_HOLDER_STEP = "policy-holder";
+  const SIGN_IN_STEP = "sign-in";
+  const MOBILE_NUMBER_STEP = "mobile-number";
 
   /**
    *
@@ -90,10 +111,6 @@
         callback(elements);
       } else if (Date.now() - startTime < timeout) {
         setTimeout(checkElements, SELECTOR_WAIT_POLL);
-      } else {
-        console.error(
-          `Timeout exceeded while waiting for elements with selector "${selector}"`
-        );
       }
     };
 
@@ -118,10 +135,6 @@
         callback(btn);
       } else if (Date.now() - startTime < timeout) {
         setTimeout(checkForBtn, SELECTOR_WAIT_POLL);
-      } else {
-        console.error(
-          `Timeout exceeded while waiting for button that is not disabled with selector "${selector}"`
-        );
       }
     };
 
@@ -159,14 +172,20 @@
 
   /**
    * @param {string} selector
+   * @param {Event | undefined} evt
+   * @param {number} timeToWait
    */
-  const clickBtn = async (selector, timeToWait = WAIT) => {
+  const clickBtn = async (selector, evt = undefined, timeToWait = WAIT) => {
     await delay(timeToWait);
 
     waitForButton(
       selector,
       SELECTOR_TIMEOUT,
-      (/** @type {HTMLButtonElement} */ btn) => btn.click()
+      (/** @type {HTMLButtonElement} */ btn) => {
+        btn.click();
+
+        if (evt) window.dispatchEvent(evt);
+      }
     );
   };
 
@@ -190,18 +209,15 @@
       }
     );
 
-    // A delay is needed to correctly populate state.
-    // TODO check if this can be avoided.
     await delay(timeToWait);
   };
 
   /**
    * @param {string} selector
    * @param {string} value
+   * @param {number} timeToWait
    */
   const fillInputNatively = async (selector, value, timeToWait = WAIT) => {
-    await delay(timeToWait);
-
     waitForElements(
       selector,
       SELECTOR_TIMEOUT,
@@ -213,15 +229,16 @@
         }
       }
     );
+
+    await delay(timeToWait);
   };
 
   /**
    * @param {string} selector
    * @param {number} index
+   * @param {number} timeToWait
    */
   const clickNthOfMultiple = async (selector, index, timeToWait = WAIT) => {
-    await delay(timeToWait);
-
     waitForElements(
       selector,
       SELECTOR_TIMEOUT,
@@ -231,6 +248,8 @@
         nthElem?.click();
       }
     );
+
+    await delay(timeToWait);
   };
 
   /**
@@ -254,133 +273,180 @@
    *
    */
 
-  // Page 1 - Initial Load
+  window.addEventListener("load", async () => {
+    if (window.location.href.endsWith("/protect/")) {
+      await fillInputNatively("#address-postcode-input", TEST_POSTCODE);
 
-  await delay(2000);
+      await clickBtn(
+        '[data-test-id="postcode-get-started-btn"]',
+        new Event(SELECT_ADDRESS_STEP, { bubbles: true })
+      );
+    } else {
+      window.dispatchEvent(new Event(SELECT_ADDRESS_STEP, { bubbles: true }));
+    }
+  });
 
-  await fillInputNatively("#address-postcode-input", TEST_POSTCODE);
+  window.addEventListener(SELECT_ADDRESS_STEP, async () => {
+    await clickNthOfMultiple('[data-test-id="address-list-item"]', 1);
 
-  await clickBtn('[data-test-id="postcode-get-started-btn"]');
+    await clickBtn(QUICK_NAV_SELECTOR, new Event(NAME_STEP, { bubbles: true }));
+  });
 
-  // Page 2 - Select Address from list
+  window.addEventListener(NAME_STEP, async () => {
+    await fillInputNatively(
+      '[data-test-id="input-first-name"]',
+      TEST_FIRST_NAME
+    );
 
-  await clickNthOfMultiple('[data-test-id="address-list-item"]', 1);
+    await fillInputNatively('[data-test-id="input-last-name"]', TEST_LAST_NAME);
 
-  await clickBtn(QUICK_NAV_SELECTOR);
+    await clickBtn(
+      '[data-test-id="next"]',
+      new Event(RENT_OWN_STEP, { bubbles: true })
+    );
+  });
 
-  // Page 3 - Name
+  window.addEventListener(RENT_OWN_STEP, async () => {
+    await clickBtn(
+      '[aria-labelledby="legend-ownershipStatus"] > div > label:first-child'
+    );
 
-  await fillInputNatively('[data-test-id="input-first-name"]', TEST_FIRST_NAME);
+    await clickBtn(
+      '[aria-labelledby="legend message"] > div > label:first-child'
+    );
 
-  await fillInputNatively('[data-test-id="input-last-name"]', TEST_LAST_NAME);
+    await clickBtn(
+      '[aria-labelledby="legend-coverType"] > div > label:first-child'
+    );
 
-  await clickBtn('[data-test-id="next"]');
+    await clickBtn(
+      '[data-test-id="continue"]',
+      new Event(MOVE_IN_STEP, { bubbles: true })
+    );
+  });
 
-  // Page 4 - Rent / Own & Cover
+  window.addEventListener(MOVE_IN_STEP, async () => {
+    await changeSelectIndex("#year-select", 8);
 
-  await clickBtn(
-    '[aria-labelledby="legend-ownershipStatus"] > div > label:first-child'
-  );
+    await clickBtn(
+      QUICK_NAV_SELECTOR,
+      new Event(HOUSEHOLD_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn(
-    '[aria-labelledby="legend message"] > div > label:first-child'
-  );
+  window.addEventListener(HOUSEHOLD_STEP, async () => {
+    await clickBtn('[data-test-id="radio-household-SingleOccupant"');
 
-  await clickBtn(
-    '[aria-labelledby="legend-coverType"] > div > label:first-child'
-  );
+    await clickBtn(
+      QUICK_NAV_SELECTOR,
+      new Event(CLAIMS_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn('[data-test-id="continue"]');
+  window.addEventListener(CLAIMS_STEP, async () => {
+    await clickBtn('[data-test-id="radio-button-has-claims-no"]');
 
-  // Page 5 - Move in Date
+    await clickBtn(
+      NEXT_BTN_SELECTOR,
+      new Event(PAYMENT_SCHEDULE_STEP, { bubbles: true })
+    );
+  });
 
-  await changeSelectIndex("#year-select", 8);
+  window.addEventListener(PAYMENT_SCHEDULE_STEP, async () => {
+    await clickBtn('[data-test-id="radio-button-payment-period-InFull"]');
 
-  await clickBtn(QUICK_NAV_SELECTOR);
+    await clickBtn(
+      NEXT_BTN_SELECTOR,
+      new Event(BEDROOMS_STEP, { bubbles: true })
+    );
+  });
 
-  // Page 6 - Who you live with
+  window.addEventListener(BEDROOMS_STEP, async () => {
+    await clickBtn('[data-test-id="radio-button-2"]');
 
-  await clickBtn('[data-test-id="radio-household-SingleOccupant"');
+    await clickBtn(
+      QUICK_NAV_SELECTOR,
+      new Event(COVER_DATE_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn(QUICK_NAV_SELECTOR);
+  window.addEventListener(COVER_DATE_STEP, async () => {
+    await clickBtn('[data-test-id="today-button"]');
 
-  // Page 7 - Claims
+    await clickBtn(
+      '[data-test-id="next"]',
+      new Event(ONE_LAST_THING_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn('[data-test-id="radio-button-has-claims-no"]');
+  window.addEventListener(ONE_LAST_THING_STEP, async () => {
+    await fillInputNatively('[data-test-id="email-input"]', TEST_EMAIL);
 
-  await clickBtn(NEXT_BTN_SELECTOR);
+    await fillInputNatively('[data-test-id="dob-input"]', TEST_DOB);
 
-  // Page 8 - How do you pay for insurance?
+    await clickBtn('[data-test-id="email-input"]');
 
-  await clickBtn('[data-test-id="radio-button-payment-period-InFull"]');
+    await clickBtn('[data-test-id="dob-input"]');
 
-  await clickBtn(NEXT_BTN_SELECTOR);
+    await clickBtn(
+      '[data-test-id="show-quote"]',
+      new Event(PRICE_PRESENTATION_STEP, { bubbles: true })
+    );
+  });
 
-  // Page 9 - Bedrooms
+  window.addEventListener(PRICE_PRESENTATION_STEP, async () => {
+    await clickBtn(
+      '[data-test-id="choose-and-customise"]',
+      new Event(AGREEMENT_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn('[data-test-id="radio-button-2"]');
+  window.addEventListener(AGREEMENT_STEP, async () => {
+    await clickBtn('[data-test-id="radio-button-assumption-0-true"]');
 
-  await clickBtn(QUICK_NAV_SELECTOR);
+    await clickBtn('[data-test-id="radio-button-assumption-1-true"]');
 
-  // Page 10 - Cover Date
+    await clickBtn(
+      NEXT_BTN_SELECTOR,
+      new Event(CUSTOMISE_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn('[data-test-id="today-button"]');
+  window.addEventListener(CUSTOMISE_STEP, async () => {
+    scrollToElem('[data-test-id="summary-cta-button-footer"]');
 
-  await clickBtn('[data-test-id="next"]');
+    await clickBtn(
+      '[data-test-id="summary-cta-button-footer"]',
+      new Event(POLICY_HOLDER_STEP, { bubbles: true })
+    );
+  });
 
-  // Page 11 - One last thing
+  window.addEventListener(POLICY_HOLDER_STEP, async () => {
+    await clickBtn('[data-test-id="radio-button-no"]');
 
-  await fillInputNatively('[data-test-id="email-input"]', TEST_EMAIL);
+    await clickBtn(
+      NEXT_BTN_SELECTOR,
+      new Event(SIGN_IN_STEP, { bubbles: true })
+    );
+  });
 
-  await fillInputNatively('[data-test-id="dob-input"]', TEST_DOB);
+  window.addEventListener(SIGN_IN_STEP, async () => {
+    await fillInputNatively('[data-testid="PASSWORD__INPUT"]', TEST_PASSWORD);
 
-  await clickBtn('[data-test-id="email-input"]');
+    await clickBtn(
+      '[data-testid="AUTHN__SUBMIT_BTN"]',
+      new Event(MOBILE_NUMBER_STEP, { bubbles: true })
+    );
+  });
 
-  await clickBtn('[data-test-id="dob-input"]');
+  // window.addEventListener(SIGN_IN_STEP, async () => {
+  //   await delay(12500);
 
-  await clickBtn('[data-test-id="show-quote"]');
+  //   await fillInputNatively(
+  //     '[data-test-id="mobile-number-input"]',
+  //     TEST_MOBILE_NUM
+  //   );
 
-  // Page 12 - Price Presentation
-
-  await clickBtn('[data-test-id="choose-and-customise"]');
-
-  // Page 13 - Aggreement
-
-  await clickBtn('[data-test-id="radio-button-assumption-0-true"]');
-
-  await clickBtn('[data-test-id="radio-button-assumption-1-true"]');
-
-  // Again a delay is needed to wait for state to populate?
-  await delay(2000);
-
-  await clickBtn(NEXT_BTN_SELECTOR);
-
-  // Page 14 - Customize
-
-  scrollToElem('[data-test-id="summary-cta-button-footer"]');
-
-  await clickBtn('[data-test-id="summary-cta-button-footer"]');
-
-  // Policy holder
-
-  await clickBtn('[data-test-id="radio-button-no"]');
-
-  await clickBtn(NEXT_BTN_SELECTOR);
-
-  // Sign in
-
-  await fillInputNatively('[data-testid="PASSWORD__INPUT"]', TEST_PASSWORD);
-
-  await clickBtn('[data-testid="AUTHN__SUBMIT_BTN"]');
-
-  // // Mobile Number
-
-  // await fillInputNatively(
-  //   '[data-test-id="mobile-number-input"]',
-  //   TEST_MOBILE_NUM
-  // );
-
-  // await delay(12500);
-
-  // await clickBtn('[data-test-id="continue-button"]');
+  //   await clickBtn('[data-test-id="continue-button"]');
+  // });
 })();
