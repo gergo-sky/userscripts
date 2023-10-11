@@ -100,7 +100,11 @@ const moveInStep = async (page) => {
   console.log(logColorInfo, "Move In Date Step");
 
   await page.locator('[data-test-id="year-select"]').selectOption("2015");
-  await page.locator('[data-test-id="quick-navigation"]').click();
+  await page
+    .locator(
+      '[data-test-id="time-at-address-step"] [data-test-id="quick-navigation"]'
+    )
+    .click();
 
   await page
     .locator('[data-test-id="household-questions"] label')
