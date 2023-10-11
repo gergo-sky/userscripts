@@ -12,6 +12,8 @@
 
 */
 
+// TODO replace waits, enable TS.
+
 import { chromium } from "playwright";
 
 const POSTCODE = "BB18 5DA";
@@ -190,6 +192,8 @@ const mobileNumber = async (page) => {
   await mobileNumInput.click();
   await mobileNumInput.fill("");
   await mobileNumInput.fill(MOBILE_NUM);
+
+  await page.waitForTimeout(3000);
 
   await page.locator('[data-test-id="continue-button"]').first().click();
 };
