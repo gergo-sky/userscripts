@@ -12,8 +12,6 @@
 
 */
 
-// TODO replace waits
-
 import { chromium } from "playwright";
 
 /** @typedef { import('playwright').Page } Page */
@@ -33,12 +31,12 @@ const logColorInfo = "\x1b[33m";
 const logColorError = "\x1b[31m";
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const homePage = async (page) => {
   console.log(logColorInfo, "Home");
 
-  await page.waitForTimeout(3000);
+  await page.waitForLoadState("networkidle");
 
   const differentAddressBtn = page.locator(
     '[data-test-id="use-different-address-link"]'
@@ -58,7 +56,7 @@ const homePage = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const addressStep = async (page) => {
   console.log(logColorInfo, "Address Step");
@@ -73,7 +71,7 @@ const addressStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const nameStep = async (page) => {
   console.log(logColorInfo, "Name Step");
@@ -84,7 +82,7 @@ const nameStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const ownershipStep = async (page) => {
   console.log(logColorInfo, "Ownership Step");
@@ -107,7 +105,7 @@ const ownershipStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const moveInStep = async (page) => {
   console.log(logColorInfo, "Move In Date Step");
@@ -129,7 +127,7 @@ const moveInStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const claimsStep = async (page) => {
   console.log(logColorInfo, "Claims Step");
@@ -144,7 +142,7 @@ const claimsStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const paymentScheduleStep = async (page) => {
   console.log(logColorInfo, "Payment Schedule Step");
@@ -159,7 +157,7 @@ const paymentScheduleStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const bedroomsStep = async (page) => {
   console.log(logColorInfo, "Bedrooms Step");
@@ -174,7 +172,7 @@ const bedroomsStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const coverStartStep = async (page) => {
   console.log(logColorInfo, "Cover Start Date Step");
@@ -189,7 +187,7 @@ const coverStartStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const emailDobStep = async (page) => {
   console.log(logColorInfo, "Email & DOB Step");
@@ -200,7 +198,7 @@ const emailDobStep = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const choosePlan = async (page) => {
   console.log(logColorInfo, "Choose Plan Page");
@@ -209,7 +207,7 @@ const choosePlan = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const assumptions = async (page) => {
   console.log(logColorInfo, "Assumptions Page");
@@ -230,7 +228,7 @@ const assumptions = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const customise = async (page) => {
   console.log(logColorInfo, "Customise Page");
@@ -239,7 +237,7 @@ const customise = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const policyHolder = async (page) => {
   console.log(logColorInfo, "Policy Holder Page");
@@ -252,7 +250,7 @@ const policyHolder = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const signIn = async (page) => {
   console.log(logColorInfo, "Sign In Page");
@@ -269,7 +267,7 @@ const signIn = async (page) => {
 };
 
 /**
- * @param {Page} page 
+ * @param {Page} page
  */
 const mobileNumber = async (page) => {
   console.log(logColorInfo, "Mobile Number Page");
@@ -280,7 +278,7 @@ const mobileNumber = async (page) => {
   await mobileNumInput.fill("");
   await mobileNumInput.fill(MOBILE_NUM);
 
-  await page.waitForTimeout(3000);
+  await page.waitForLoadState("networkidle");
 
   await page.locator('[data-test-id="continue-button"]').first().click();
 };
