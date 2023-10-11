@@ -26,7 +26,13 @@ const MOBILE_NUM = "07123456789";
 
 let signedIn = false;
 
+const logColorSuccess = "\x1b[32m";
+const logColorInfo = "\x1b[33m";
+const logColorError = "\x1b[31m";
+
 const homePage = async (page) => {
+  console.log(logColorInfo, "Home");
+
   await page.waitForTimeout(3000);
 
   const differentAddressBtn = await page.locator(
@@ -51,6 +57,8 @@ const homePage = async (page) => {
 };
 
 const addressStep = async (page) => {
+  console.log(logColorInfo, "Address Step");
+
   await page
     .locator('[data-test-id="address-list-container"]')
     .locator("li")
@@ -61,12 +69,16 @@ const addressStep = async (page) => {
 };
 
 const nameStep = async (page) => {
+  console.log(logColorInfo, "Name Step");
+
   await page.locator('[data-test-id="input-first-name"]').fill(FIRST_NAME);
   await page.locator('[data-test-id="input-last-name"]').fill(LAST_NAME);
   await page.locator('[data-test-id="next"]').first().click();
 };
 
 const ownershipStep = async (page) => {
+  console.log(logColorInfo, "Ownership Step");
+
   await page
     .locator(
       '[aria-labelledby="legend-ownershipStatus"] > div > label:first-child'
@@ -85,6 +97,8 @@ const ownershipStep = async (page) => {
 };
 
 const moveInStep = async (page) => {
+  console.log(logColorInfo, "Move In Date Step");
+
   await page.locator('[data-test-id="year-select"]').selectOption("2015");
   await page.locator('[data-test-id="quick-navigation"]').click();
 
@@ -97,6 +111,8 @@ const moveInStep = async (page) => {
 };
 
 const claimsStep = async (page) => {
+  console.log(logColorInfo, "Claims Step");
+
   await page
     .locator("label", {
       has: page.locator('[data-test-id="radio-button-has-claims-no"]'),
@@ -107,6 +123,8 @@ const claimsStep = async (page) => {
 };
 
 const paymentScheduleStep = async (page) => {
+  console.log(logColorInfo, "Payment Schedule Step");
+
   await page
     .locator("label", {
       has: page.locator('[data-test-id="radio-button-payment-period-InFull"]'),
@@ -117,6 +135,8 @@ const paymentScheduleStep = async (page) => {
 };
 
 const bedroomsStep = async (page) => {
+  console.log(logColorInfo, "Bedrooms Step");
+
   await page
     .locator("label", {
       has: page.locator('[data-test-id="radio-button-2"]'),
@@ -127,6 +147,8 @@ const bedroomsStep = async (page) => {
 };
 
 const coverStartStep = async (page) => {
+  console.log(logColorInfo, "Cover Start Date Step");
+
   await page
     .locator("label", {
       has: page.locator('[data-test-id="today-button"]'),
@@ -137,16 +159,22 @@ const coverStartStep = async (page) => {
 };
 
 const emailDobStep = async (page) => {
+  console.log(logColorInfo, "Email & DOB Step");
+
   await page.locator('[data-test-id="email-input"]').fill(EMAIL);
   await page.locator('[data-test-id="dob-input"]').fill(DOB);
   await page.locator('[data-test-id="show-quote"]').click();
 };
 
 const choosePlan = async (page) => {
+  console.log(logColorInfo, "Choose Plan Page");
+
   await page.locator('[data-test-id="choose-and-customise"]').click();
 };
 
 const assumptions = async (page) => {
+  console.log(logColorInfo, "Assumptions Page");
+
   await page
     .locator("label", {
       has: page.locator('[data-test-id="radio-button-assumption-0-true"]'),
@@ -163,10 +191,14 @@ const assumptions = async (page) => {
 };
 
 const customise = async (page) => {
+  console.log(logColorInfo, "Customise Page");
+
   await page.locator('[data-test-id="summary-cta-button-footer"]').click();
 };
 
 const policyHolder = async (page) => {
+  console.log(logColorInfo, "Policy Holder Page");
+
   await page
     .locator("label", { has: page.locator('[data-test-id="radio-button-no"]') })
     .click();
@@ -175,6 +207,8 @@ const policyHolder = async (page) => {
 };
 
 const signIn = async (page) => {
+  console.log(logColorInfo, "Sign In Page");
+
   const signinIframe = page
     .frameLocator('iframe[title="iFrame containing Sky Sign-In application"]')
     .first();
@@ -187,6 +221,8 @@ const signIn = async (page) => {
 };
 
 const mobileNumber = async (page) => {
+  console.log(logColorInfo, "Mobile Number Page");
+
   const mobileNumInput = await page.locator("#mobile-number");
 
   await mobileNumInput.click();
@@ -202,8 +238,8 @@ const mobileNumber = async (page) => {
   try {
     const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
 
-    console.log(browser.isConnected() && "Connected to Chrome.");
-    console.log(`Contexts in CDP session: ${browser.contexts().length}.`);
+    console.log(browser.isConnected() && "Connected to Chrome");
+    console.log(`Contexts in CDP session: ${browser.contexts().length}`);
 
     const context = browser.contexts()[0];
     const allPages = context.pages();
@@ -224,10 +260,14 @@ const mobileNumber = async (page) => {
     await assumptions(page);
     await customise(page);
     await policyHolder(page);
+
     !signedIn && (await signIn(page));
+
     await mobileNumber(page);
+
+    console.log(logColorSuccess, "Journey completed");
   } catch (error) {
-    console.log("Cannot connect to Chrome.");
+    console.log(logColorError, "Cannot connect to Chrome");
   } finally {
     process.exit(0);
   }
