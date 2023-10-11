@@ -267,7 +267,7 @@ const mobileNumber = async (page) => {
 
     console.log(logColorSuccess, "Journey completed");
   } catch (error) {
-    console.log(logColorError, "Cannot connect to Chrome");
+    console.log(logColorError, error);
   } finally {
     process.exit(0);
   }
