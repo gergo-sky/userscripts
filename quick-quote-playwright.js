@@ -12,9 +12,11 @@
 
 */
 
-// TODO replace waits, enable TS.
+// TODO replace waits
 
 import { chromium } from "playwright";
+
+/** @typedef { import('playwright').Page } Page */
 
 const POSTCODE = "BB18 5DA";
 const FIRST_NAME = "DARREN";
@@ -30,12 +32,15 @@ const logColorSuccess = "\x1b[32m";
 const logColorInfo = "\x1b[33m";
 const logColorError = "\x1b[31m";
 
+/**
+ * @param {Page} page 
+ */
 const homePage = async (page) => {
   console.log(logColorInfo, "Home");
 
   await page.waitForTimeout(3000);
 
-  const differentAddressBtn = await page.locator(
+  const differentAddressBtn = page.locator(
     '[data-test-id="use-different-address-link"]'
   );
 
@@ -46,16 +51,15 @@ const homePage = async (page) => {
 
     await page.locator("#postcode").fill(POSTCODE);
     await page.locator('[data-test-id="search"]').click();
-
-    await addressStep(page);
   } else {
     await page.locator('[data-test-id="postcode-input"]').fill(POSTCODE);
     await page.locator('[data-test-id="postcode-get-started-btn"]').click();
-
-    await addressStep(page);
   }
 };
 
+/**
+ * @param {Page} page 
+ */
 const addressStep = async (page) => {
   console.log(logColorInfo, "Address Step");
 
@@ -68,6 +72,9 @@ const addressStep = async (page) => {
   await page.locator('[data-test-id="quick-navigation"]').click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const nameStep = async (page) => {
   console.log(logColorInfo, "Name Step");
 
@@ -76,6 +83,9 @@ const nameStep = async (page) => {
   await page.locator('[data-test-id="next"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const ownershipStep = async (page) => {
   console.log(logColorInfo, "Ownership Step");
 
@@ -96,10 +106,14 @@ const ownershipStep = async (page) => {
   await page.locator('[data-test-id="continue"]').click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const moveInStep = async (page) => {
   console.log(logColorInfo, "Move In Date Step");
 
   await page.locator('[data-test-id="year-select"]').selectOption("2015");
+
   await page
     .locator(
       '[data-test-id="time-at-address-step"] [data-test-id="quick-navigation"]'
@@ -114,6 +128,9 @@ const moveInStep = async (page) => {
   await page.locator("#next-btn").first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const claimsStep = async (page) => {
   console.log(logColorInfo, "Claims Step");
 
@@ -126,6 +143,9 @@ const claimsStep = async (page) => {
   await page.locator('[data-test-id="next-button"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const paymentScheduleStep = async (page) => {
   console.log(logColorInfo, "Payment Schedule Step");
 
@@ -138,6 +158,9 @@ const paymentScheduleStep = async (page) => {
   await page.locator('[data-test-id="next-button"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const bedroomsStep = async (page) => {
   console.log(logColorInfo, "Bedrooms Step");
 
@@ -150,6 +173,9 @@ const bedroomsStep = async (page) => {
   await page.locator('[data-test-id="quick-navigation"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const coverStartStep = async (page) => {
   console.log(logColorInfo, "Cover Start Date Step");
 
@@ -162,6 +188,9 @@ const coverStartStep = async (page) => {
   await page.locator('[data-test-id="next"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const emailDobStep = async (page) => {
   console.log(logColorInfo, "Email & DOB Step");
 
@@ -170,12 +199,18 @@ const emailDobStep = async (page) => {
   await page.locator('[data-test-id="show-quote"]').click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const choosePlan = async (page) => {
   console.log(logColorInfo, "Choose Plan Page");
 
   await page.locator('[data-test-id="choose-and-customise"]').click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const assumptions = async (page) => {
   console.log(logColorInfo, "Assumptions Page");
 
@@ -194,12 +229,18 @@ const assumptions = async (page) => {
   await page.locator('[data-test-id="next-button"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const customise = async (page) => {
   console.log(logColorInfo, "Customise Page");
 
   await page.locator('[data-test-id="summary-cta-button-footer"]').click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const policyHolder = async (page) => {
   console.log(logColorInfo, "Policy Holder Page");
 
@@ -210,6 +251,9 @@ const policyHolder = async (page) => {
   await page.locator('[data-test-id="next-button"]').first().click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const signIn = async (page) => {
   console.log(logColorInfo, "Sign In Page");
 
@@ -224,10 +268,13 @@ const signIn = async (page) => {
   await continueBtn.click();
 };
 
+/**
+ * @param {Page} page 
+ */
 const mobileNumber = async (page) => {
   console.log(logColorInfo, "Mobile Number Page");
 
-  const mobileNumInput = await page.locator("#mobile-number");
+  const mobileNumInput = page.locator("#mobile-number");
 
   await mobileNumInput.click();
   await mobileNumInput.fill("");
@@ -251,9 +298,10 @@ const mobileNumber = async (page) => {
 
     page.goto("https://local.bskyb.com:8443/protect/");
 
-    page.setDefaultTimeout(5000);
+    page.setDefaultTimeout(10000);
 
     await homePage(page);
+    await addressStep(page);
     await nameStep(page);
     await ownershipStep(page);
     await moveInStep(page);
