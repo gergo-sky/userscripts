@@ -17,8 +17,10 @@ import { chromium } from "playwright";
 const POSTCODE = "BB18 5DA";
 const FIRST_NAME = "DARREN";
 const LAST_NAME = "ABBAS-soipleave";
-const EMAIL = "SOg_621195980134_PR@sky.uk";
 const DOB = "19/09/1972";
+const EMAIL = "SOg_621195980134_PR@sky.uk";
+const PASSWORD = "test1234";
+const MOBILE_NUM = "07123456789";
 
 const homePage = async (page) => {
   await page.waitForTimeout(2000);
@@ -33,7 +35,7 @@ const addressStep = async (page) => {
     .locator("li")
     .nth(1)
     .click();
-    
+
   await page.locator('[data-test-id="quick-navigation"]').click();
 };
 
@@ -151,6 +153,26 @@ const policyHolder = async (page) => {
   await page.locator('[data-test-id="next-button"]').first().click();
 };
 
+const signIn = async (page) => {
+  const signinIframe = page
+    .frameLocator('iframe[title="iFrame containing Sky Sign-In application"]')
+    .first();
+
+  const passwordInput = signinIframe.locator('[data-testid="PASSWORD__INPUT"]');
+  const continueBtn = signinIframe.locator('[data-testid="AUTHN__SUBMIT_BTN"]');
+
+  await passwordInput.fill(PASSWORD);
+  await continueBtn.click();
+};
+
+const mobileNumber = async (page) => {
+  await page.locator('[data-test-id="mobile-number-input"]').fill(MOBILE_NUM);
+
+  await page.waitForTimeout(2000);
+
+  await page.locator('[data-test-id="continue-button"]').first().click();
+};
+
 (async () => {
   try {
     const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
@@ -178,6 +200,8 @@ const policyHolder = async (page) => {
     await assumptions(page);
     await customise(page);
     await policyHolder(page);
+    await signIn(page);
+    await mobileNumber(page);
   } catch (error) {
     console.log("Cannot connect to Chrome.");
   } finally {
