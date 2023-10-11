@@ -121,6 +121,22 @@ const choosePlan = async (page) => {
   await page.locator('[data-test-id="choose-and-customise"]').click();
 };
 
+const assumptions = async (page) => {
+  await page
+    .locator("label", {
+      has: page.locator('[data-test-id="radio-button-assumption-0-true"]'),
+    })
+    .click();
+
+  await page
+    .locator("label", {
+      has: page.locator('[data-test-id="radio-button-assumption-1-true"]'),
+    })
+    .click();
+
+  await page.locator('[data-test-id="next-button"]').first().click();
+};
+
 (async () => {
   try {
     const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
@@ -145,6 +161,7 @@ const choosePlan = async (page) => {
     await coverStartStep(page);
     await emailDobStep(page);
     await choosePlan(page);
+    await assumptions(page);
   } catch (error) {
     console.log("Cannot connect to Chrome.");
   } finally {
