@@ -21,6 +21,8 @@ const EMAIL = "SOg_621195980134_PR@sky.uk";
 const DOB = "19/09/1972";
 
 const homePage = async (page) => {
+  await page.waitForTimeout(2000);
+
   await page.locator('[data-test-id="postcode-input"]').fill(POSTCODE);
   await page.locator('[data-test-id="postcode-get-started-btn"]').click();
 };
