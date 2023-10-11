@@ -23,8 +23,6 @@ const PASSWORD = "test1234";
 const MOBILE_NUM = "07123456789";
 
 const homePage = async (page) => {
-  await page.waitForTimeout(2000);
-
   await page.locator('[data-test-id="postcode-input"]').fill(POSTCODE);
   await page.locator('[data-test-id="postcode-get-started-btn"]').click();
 };
@@ -166,9 +164,8 @@ const signIn = async (page) => {
 };
 
 const mobileNumber = async (page) => {
+  await page.locator('[data-test-id="mobile-number-input"]').fill("");
   await page.locator('[data-test-id="mobile-number-input"]').fill(MOBILE_NUM);
-
-  await page.waitForTimeout(2000);
 
   await page.locator('[data-test-id="continue-button"]').first().click();
 };
