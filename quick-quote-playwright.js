@@ -164,8 +164,11 @@ const signIn = async (page) => {
 };
 
 const mobileNumber = async (page) => {
-  await page.locator('[data-test-id="mobile-number-input"]').fill("");
-  await page.locator('[data-test-id="mobile-number-input"]').fill(MOBILE_NUM);
+  const mobileNumInput = await page.locator("#mobile-number");
+
+  await mobileNumInput.click();
+  await mobileNumInput.fill("");
+  await mobileNumInput.fill(MOBILE_NUM);
 
   await page.locator('[data-test-id="continue-button"]').first().click();
 };
