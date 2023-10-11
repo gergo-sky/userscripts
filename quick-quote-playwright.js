@@ -22,9 +22,28 @@ const EMAIL = "SOg_621195980134_PR@sky.uk";
 const PASSWORD = "test1234";
 const MOBILE_NUM = "07123456789";
 
+let signedIn = false;
+
 const homePage = async (page) => {
-  await page.locator('[data-test-id="postcode-input"]').fill(POSTCODE);
-  await page.locator('[data-test-id="postcode-get-started-btn"]').click();
+  const differentAddressBtn = await page.locator(
+    '[data-test-id="use-different-address-link"]'
+  );
+
+  if (differentAddressBtn) {
+    signedIn = true;
+
+    differentAddressBtn.click();
+
+    await page.locator("#postcode").fill(POSTCODE);
+    await page.locator('[data-test-id="search"]').click();
+
+    await addressStep(page);
+  } else {
+    await page.locator('[data-test-id="postcode-input"]').fill(POSTCODE);
+    await page.locator('[data-test-id="postcode-get-started-btn"]').click();
+
+    await addressStep(page);
+  }
 };
 
 const addressStep = async (page) => {
@@ -187,7 +206,6 @@ const mobileNumber = async (page) => {
     page.goto("https://local.bskyb.com:8443/protect/");
 
     await homePage(page);
-    await addressStep(page);
     await nameStep(page);
     await ownershipStep(page);
     await moveInStep(page);
@@ -200,7 +218,7 @@ const mobileNumber = async (page) => {
     await assumptions(page);
     await customise(page);
     await policyHolder(page);
-    await signIn(page);
+    !signedIn && (await signIn(page));
     await mobileNumber(page);
   } catch (error) {
     console.log("Cannot connect to Chrome.");
