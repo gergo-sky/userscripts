@@ -251,6 +251,8 @@ const mobileNumber = async (page) => {
 
     page.goto("https://local.bskyb.com:8443/protect/");
 
+    page.setDefaultTimeout(5000);
+
     await homePage(page);
     await nameStep(page);
     await ownershipStep(page);
@@ -264,9 +266,7 @@ const mobileNumber = async (page) => {
     await assumptions(page);
     await customise(page);
     await policyHolder(page);
-
     !signedIn && (await signIn(page));
-
     await mobileNumber(page);
 
     console.log(logColorSuccess, "Journey completed");
