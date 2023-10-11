@@ -114,7 +114,11 @@ const coverStartStep = async (page) => {
 const emailDobStep = async (page) => {
   await page.locator('[data-test-id="email-input"]').fill(EMAIL);
   await page.locator('[data-test-id="dob-input"]').fill(DOB);
-  // await page.locator('[data-test-id="show-quote"]').click();
+  await page.locator('[data-test-id="show-quote"]').click();
+};
+
+const choosePlan = async (page) => {
+  await page.locator('[data-test-id="choose-and-customise"]').click();
 };
 
 (async () => {
@@ -140,6 +144,7 @@ const emailDobStep = async (page) => {
     await bedroomsStep(page);
     await coverStartStep(page);
     await emailDobStep(page);
+    await choosePlan(page);
   } catch (error) {
     console.log("Cannot connect to Chrome.");
   } finally {
