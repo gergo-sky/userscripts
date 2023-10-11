@@ -2,7 +2,7 @@
 
 1. Open chrome with debugging enabled
 
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --incognito
 
 2. Keep one page open
 
@@ -26,7 +26,12 @@ const homePage = async (page) => {
 };
 
 const addressStep = async (page) => {
-  await page.locator('[data-test-id="address-list-item"]').first().click();
+  await page
+    .locator('[data-test-id="address-list-container"]')
+    .locator("li")
+    .nth(1)
+    .click();
+    
   await page.locator('[data-test-id="quick-navigation"]').click();
 };
 
@@ -141,3 +146,4 @@ const emailDobStep = async (page) => {
     process.exit(0);
   }
 })();
+    
