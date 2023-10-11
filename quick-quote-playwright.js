@@ -25,14 +25,16 @@ const MOBILE_NUM = "07123456789";
 let signedIn = false;
 
 const homePage = async (page) => {
+  await page.waitForTimeout(3000);
+
   const differentAddressBtn = await page.locator(
     '[data-test-id="use-different-address-link"]'
   );
 
-  if (differentAddressBtn) {
+  if (await differentAddressBtn.isVisible()) {
     signedIn = true;
 
-    differentAddressBtn.click();
+    await differentAddressBtn.click();
 
     await page.locator("#postcode").fill(POSTCODE);
     await page.locator('[data-test-id="search"]').click();
