@@ -137,6 +137,18 @@ const assumptions = async (page) => {
   await page.locator('[data-test-id="next-button"]').first().click();
 };
 
+const customise = async (page) => {
+  await page.locator('[data-test-id="summary-cta-button-footer"]').click();
+};
+
+const policyHolder = async (page) => {
+  await page
+    .locator("label", { has: page.locator('[data-test-id="radio-button-no"]') })
+    .click();
+
+  await page.locator('[data-test-id="next-button"]').first().click();
+};
+
 (async () => {
   try {
     const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
@@ -162,10 +174,11 @@ const assumptions = async (page) => {
     await emailDobStep(page);
     await choosePlan(page);
     await assumptions(page);
+    await customise(page);
+    await policyHolder(page);
   } catch (error) {
     console.log("Cannot connect to Chrome.");
   } finally {
     process.exit(0);
   }
 })();
-    
