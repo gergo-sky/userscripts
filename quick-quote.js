@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 (async function () {
-  ("use strict");
+  "use strict";
 
   /**
    *
@@ -19,25 +19,12 @@
    *
    */
 
-  /** @type {string} */
-  const TEST_EMAIL = "SOg_621195980134_PR@sky.uk";
-
-  /** @type {string} */
+  const TEST_EMAIL = "veyek7193wrawa235a3wss6@locawin.com";
   const TEST_PASSWORD = "test1234";
-
-  /** @type {string} */
   const TEST_DOB = "19/09/1972";
-
-  /** @type {string} */
   const TEST_POSTCODE = "BB18 5DA";
-
-  /** @type {string} */
   const TEST_FIRST_NAME = "DARREN";
-
-  /** @type {string} */
   const TEST_LAST_NAME = "ABBAS-soipleave";
-
-  /** @type {string} */
   const TEST_MOBILE_NUM = "07123456789";
 
   /**
@@ -46,22 +33,11 @@
    *
    */
 
-  /** @type {string} */
   const QUICK_NAV_SELECTOR = '[data-test-id="quick-navigation"]';
-
-  /** @type {string} */
   const NEXT_BTN_SELECTOR = '[data-test-id="next-button"]';
-
-  /** @type {number} */
   const STANDARD_WAIT = 200;
-
-  /** @type {number} */
   const SELECTOR_TIMEOUT = 20000;
-
-  /** @type {number} */
   const SELECTOR_WAIT_POLL = 100;
-
-  /** @type {number} */
   const WAIT = 50;
 
   /**
@@ -99,12 +75,12 @@
    * @param {string} selector
    * @param {number} timeout
    * @param {function} callback
+   * @returns {void}
    */
   const waitForElements = (selector, timeout, callback) => {
     const startTime = Date.now();
 
     const checkElements = () => {
-      /** @type {NodeListOf<HTMLElement>} */
       const elements = document.querySelectorAll(selector);
 
       if (elements.length > 0) {
@@ -128,7 +104,6 @@
     const startTime = Date.now();
 
     const checkForBtn = () => {
-      /** @type {HTMLButtonElement | null} */
       const btn = document.querySelector(selector);
 
       if (btn && !btn.disabled) {
@@ -146,7 +121,6 @@
    *
    * @param {HTMLElement} element
    * @param {string} value
-   * @return {void}
    */
   const setNativeValue = (element, value) => {
     const { set: valueSetter } =
@@ -166,7 +140,7 @@
 
   /**
    * @param {number} ms
-   * @returns {Promise<void>}
+   * @returns {Promise<number>}
    */
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -194,6 +168,7 @@
    *
    * @param {string} selector
    * @param {number} optionIdx
+   * @param timeToWait
    * @returns {Promise<void>}
    */
   const changeSelectIndex = async (
