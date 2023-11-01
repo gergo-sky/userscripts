@@ -19,7 +19,7 @@
    *
    */
 
-  const TEST_EMAIL = "veyek7193wrawa235a3wss6@locawin.com";
+  const TEST_EMAIL = "autoft.1675262929861@sky.uk";
   const TEST_PASSWORD = "test1234";
   const TEST_DOB = "19/09/1972";
   const TEST_POSTCODE = "BB18 5DA";
@@ -292,7 +292,7 @@
 
   window.addEventListener(RENT_OWN_STEP, async () => {
     await clickBtn(
-      '[aria-labelledby="legend-ownershipStatus"] > div > label:first-child'
+        '[aria-labelledby="legend-ownershipStatus"] > div > label:nth-child(2)'
     );
 
     await clickBtn(
